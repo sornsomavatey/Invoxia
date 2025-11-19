@@ -1,0 +1,45 @@
+/* upload.css - specific to Upload page */
+
+/* Make the page main container flexible for footer */
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto; /* grows to fill space */
+}
+
+footer {
+    flex-shrink: 0; /* never shrink */
+}
+
+/* Preview image */
+#preview {
+    max-height: 300px;
+    display: none;
+    margin-top: 15px;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+/* Upload form */
+form.bg-white {
+    transition: all 0.3s ease;
+}
+
+form.bg-white:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    section.py-5 {
+        padding: 3rem 1rem;
+    }
+}
