@@ -68,7 +68,6 @@ nav ul.header li a:hover {
     color: #000;
 }
 
-
 /* Hero Section */
 .hero {
     display: flex;
@@ -167,14 +166,6 @@ nav ul.header li a:hover {
     font-size: 0.95rem;
 }
 
-/* Footer */
-footer {
-    text-align: center;
-    padding: 30px;
-    background: #ffffff;
-    margin-top: 60px;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-}
 
 /* How It Works Section */
 .how-it-works {
@@ -234,3 +225,28 @@ footer {
 }
 
 
+/**/
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* full viewport height */
+}
+
+.content-wrap {
+    flex: 1; /* take all available space between navbar and footer */
+}
+
+footer {
+    text-align: center;
+    padding: 30px;
+    margin-top: 0; /* remove margin-top */
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+    background-color:  #ddf5ffc5;
+    font-weight: 500;
+}

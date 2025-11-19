@@ -1,21 +1,60 @@
 /* upload.css - specific to Upload page */
 
-/* Make the page main container flexible for footer */
-html, body {
-    height: 100%;
+
+/* Buttons */
+.btn-primary, .cta-btn {
+    background-color:  #162a47;
+    border: none;
+    border-radius: 10px;
+    transition: all 0.3s ease;
 }
 
-body {
-    display: flex;
-    flex-direction: column;
+.btn-primary:hover, .cta-btn:hover {
+    background-color: #162a47;
+    transform: scale(1.05);
 }
 
-main {
-    flex: 1 0 auto; /* grows to fill space */
+/* Tips / Cards hover effect */
+.hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
 }
 
-footer {
-    flex-shrink: 0; /* never shrink */
+/* Headings */
+h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    color: #10223e;
+}
+
+h5 {
+    color: #10223e;
+    font-weight: 600;
+}
+
+/* Table styling */
+.table th, .table td {
+    vertical-align: middle;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f1f3f6;
+}
+
+
+
+/* Preview Image */
+#preview {
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px){
+    .hover-card {
+        margin-bottom: 20px;
+    }
 }
 
 /* Preview image */
@@ -37,9 +76,4 @@ form.bg-white:hover {
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }
 
-/* Responsive adjustments */
-@media (max-width: 576px) {
-    section.py-5 {
-        padding: 3rem 1rem;
-    }
-}
+
