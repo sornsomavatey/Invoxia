@@ -2,159 +2,141 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AksorAi – Upload Registration Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Invoxia – Invoice Intelligence System</title>
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <!-- Bootstrap -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+  <!-- Bootstrap Icons -->
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+  rel="stylesheet"
+/>
 
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Google Font -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+    rel="stylesheet"
+  >
+
 
   <!-- Custom CSS -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/upload.css') }}">
 </head>
-<body class="page-container">
 
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
-    <div class="container">
-      <a class="navbar-brand fw-bold" href="/">AksorAi</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="/">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="/upload">Upload</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/about">About Us</a>
-          </li>
-        </ul>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm aksor-navbar">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="/">Invoxia</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto text-center">
+        <li class="nav-item">
+          <a class="nav-link active" href="/">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/upload">Upload Invoice</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/analytic">Analytics</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/pricing">Pricing</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/about">About Us</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<section class="upload-page py-5 bg-dark text-white">
+  <div class="container">
+    <h2 class="text-center mb-5">Upload Your Invoice</h2>
+
+    <!-- Upload Box -->
+    <div class="upload-box p-5 rounded shadow mb-5 text-center">
+      <i class="bi bi-upload" style="font-size: 3rem; color: #ffd700;"></i>
+      <h5>Drag & Drop your invoice here</h5>
+      <p class="text-white">or click to select a file (PNG, JPG, JPEG)</p>
+      <input type="file" id="invoiceFile" class="form-control mt-3" accept=".png,.jpg,.jpeg">
+      <button id="uploadBtn" class="btn btn-warning btn-lg mt-3">Upload & Process</button>
+      <div class="progress mt-3" style="height:6px;">
+        <div class="progress-bar bg-gold" role="progressbar" style="width:0%"></div>
       </div>
     </div>
-  </nav>
 
-  <!-- Main Content -->
-  <main class="content-wrap">
+    <!-- Result / Extracted Data -->
+    <div id="resultSection" class="result-section d-none">
+      <h4 class="mb-3">Extracted Invoice Data</h4>
+      <table class="table table-dark table-striped text-white">
+        <thead>
+          <tr>
+            <th>Field</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody id="resultTable">
+          <!-- Data will be populated here dynamically -->
+        </tbody>
+      </table>
+      <button class="btn btn-outline-warning mt-3">Download CSV</button>
+    </div>
+  </div>
+</section>
 
-    <!-- Tips Section -->
-    <section class="py-5 bg-light">
-      <div class="container">
-        <h2 class="mb-4 text-center">Tips for a Better Result!</h2>
-        <div class="row g-4">
-          <div class="col-md-4">
-            <div class="p-4 bg-white rounded shadow h-100 text-center hover-card">
-              <h5>Good Lighting</h5>
-              <p>Ensure your form is well-lit and avoid shadows for better recognition.</p>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="p-4 bg-white rounded shadow h-100 text-center hover-card">
-              <h5>Straight Angle</h5>
-              <p>Take the photo straight-on, not tilted, so the AI can accurately detect fields.</p>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="p-4 bg-white rounded shadow h-100 text-center hover-card">
-              <h5>Clear Handwriting</h5>
-              <p>Write clearly and use dark ink for optimal text recognition.</p>
-            </div>
-          </div>
-        </div>
+
+<!-- FOOTER -->
+<footer class="footer mt-5 py-4">
+  <div class="container">
+    <div class="row text-center text-md-start">
+
+      <div class="col-md-3 mb-3">
+        <h5>Invoxia</h5>
+        <p>Smart invoice digitization & finance tracker powered by AI.</p>
       </div>
-    </section>
 
-    <!-- Upload Section -->
-    <section class="py-5">
-      <div class="container">
-        <h2 class="mb-4 text-center ">Upload Registration Form</h2>
-        <div class="row justify-content-center">
-          <div class="col-lg-6">
-            <form action="/upload_form" method="POST" enctype="multipart/form-data" class="bg-white p-4 rounded shadow hover-card">
-              <div class="mb-3">
-                <label for="formFile" class="form-label">Choose Registration Form</label>
-                <input class="form-control" type="file" id="formFile" name="file" accept=".jpg,.jpeg,.png,.pdf" required>
-              </div>
-              <button type="submit" class="btn btn-primary w-100 cta-btn">Upload & Detect</button>
-            </form>
-
-            <!-- Optional: Preview uploaded image -->
-            <div class="mt-4 text-center">
-              <img id="preview" class="img-fluid rounded shadow" style="max-height:300px; display:none;" alt="Preview">
-            </div>
-          </div>
-        </div>
+      <div class="col-md-3 mb-3">
+        <h5>Contact</h5>
+        <p>Email: support@invoxia.com</p>
+        <p>Location: Phnom Penh, Cambodia</p>
       </div>
-    </section>
 
-    <!-- Detected Data Table -->
-    {% if registrations %}
-    <section class="py-5 bg-light">
-      <div class="container">
-        <h2 class="mb-4 text-center text-primary">Detected Data</h2>
-        <div class="table-responsive shadow rounded">
-          <table class="table table-striped table-bordered table-hover align-middle">
-            <thead class="table-primary">
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Uploaded File</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for reg in registrations %}
-              <tr>
-                <td>{{ reg.name }}</td>
-                <td>{{ reg.email }}</td>
-                <td>{{ reg.phone }}</td>
-                <td>{{ reg.original_file }}</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
+      <div class="col-md-3 mb-3">
+        <h5>Follow Us</h5>
+        <p>Facebook</p>
+        <p>LinkedIn</p>
+        <p>Instagram</p>
       </div>
-    </section>
-    {% endif %}
 
-  </main>
+      <div class="col-md-3 mb-3">
+        <h5>Stay Updated</h5>
+        <input type="email" class="form-control mb-2" placeholder="Enter your email">
+        <button class="btn btn-light w-100">Subscribe</button>
+      </div>
 
-  <!-- Footer -->
-  <footer class="py-4 text-black shadow-sm text-center">
-    © 2025 AksorAi — Handwritten Form Digitization
-  </footer>
+    </div>
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <div class="text-center mt-4">
+      © 2025 Invoxia — All Rights Reserved
+    </div>
+  </div>
+</footer>
 
-  <!-- Image preview JS -->
-  <script>
-    const formFile = document.getElementById('formFile');
-    const preview = document.getElementById('preview');
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    formFile.addEventListener('change', function(){
-      const file = this.files[0];
-      if(file && file.type.startsWith('image/')){
-        const reader = new FileReader();
-        reader.onload = e => {
-          preview.src = e.target.result;
-          preview.style.display = 'block';
-        }
-        reader.readAsDataURL(file);
-      } else {
-        preview.style.display = 'none';
-      }
-    });
-  </script>
+<!-- Custom JS -->
+<script src="{{ url_for('static', filename='js/upload.js') }}"></script>
+
 </body>
 </html>

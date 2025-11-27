@@ -2,135 +2,262 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AksorAi – Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Invoxia – Invoice Intelligence System</title>
 
-  <!-- Optional: Google fonts like your homepage -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <!-- Bootstrap -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
 
-  <!-- Use Flask url_for for static files -->
+  <!-- Google Font -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- Custom CSS -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-  
 </head>
-<body class="page-container">
 
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
-    <div class="container">
-      <a class="navbar-brand fw-bold" href="/">AksorAi</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="/">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/upload">Upload</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/about">About Us</a>
-          </li>
-        </ul>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm aksor-navbar">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="/">Invoxia</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto text-center">
+        <li class="nav-item">
+          <a class="nav-link active" href="/">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/upload">Upload Invoice</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/analytic">Analytics</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/pricing">Pricing</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/about">About Us</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero-section d-flex align-items-center">
+  <div class="container text-center text-lg-start">
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <h1 class="fw-bold hero-title">Smart Invoice Extraction & Finance Tracking</h1>
+        <p class="hero-subtitle mt-3">
+          Automate invoice detection, text extraction, and financial analytics using YOLO + OCR.
+        </p>
+        <a href="/upload" class="btn btn-light btn-lg mt-3">Start Uploading</a>
+      </div>
+
+      <div class="col-lg-6 text-center mt-4 mt-lg-0">
+        <img src="{{ url_for('static', filename='images/herosectionimage1.png') }}" class="img-fluid hero-image" alt="Invoice AI">
       </div>
     </div>
-  </nav>
+  </div>
+</section>
 
+<!-- FUNCTIONS GRID -->
+<section class="py-5 container">
+  <h2 class="text-center mb-5 fw-bold">Core Features & Functionality</h2>
 
-  <main class="content-wrap">
-    <!-- Hero Section -->
-    <section class="hero py-5">
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-lg-6 text-center text-lg-start mb-4 mb-lg-0">
-            <h1 class="display-4 fw-bold">Digitize Handwritten Forms<br>with AksorAi</h1>
-            <p class="lead mt-3">AksorAi helps you convert handwritten registration forms into clean digital data using the power of AI. Fast, accurate, and effortless.</p>
-            <a href="/upload" class="btn btn-dark btn-lg mt-3">Get Started</a>
+  <div class="row g-4">
+    <div class="col-md-6 col-lg-3">
+      <div class="feature-box shadow-sm p-4 text-center h-100">
+        <h5>AI Invoice Detection</h5>
+        <p>Detect invoice fields like total, date, ID, vendor using YOLOv8.</p>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+      <div class="feature-box shadow-sm p-4 text-center h-100">
+        <h5>OCR Extraction</h5>
+        <p>Convert printed or handwritten text to digital structured data.</p>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+      <div class="feature-box shadow-sm p-4 text-center h-100">
+        <h5>Organized Finance Tracking</h5>
+        <p>Automatically log totals, dates, suppliers for smart tracking.</p>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+      <div class="feature-box shadow-sm p-4 text-center h-100">
+        <h5>Export & Insights</h5>
+        <p>Download PDF/Excel reports, visual charts, and monthly summaries.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="advantages py-5 bg-dark text-white">
+  <div class="container text-center">
+    <h2 class="mb-4">Why Choose Our Invoice Tracking System?</h2>
+    <p class="mb-5 lead">Maximize efficiency, accuracy, and control over your finances.</p>
+
+    <div class="row g-4">
+      
+      <!-- Card 1 -->
+      <div class="col-md-4">
+        <div class="adv-card p-3 rounded shadow">
+          <div class="adv-img mb-3">
+            <img src="{{ url_for('static', filename='images/image1.webp') }}" alt="Automated Processing" class="img-fluid">
           </div>
-          <div class="col-lg-6 text-center">
-            <img src="{{ url_for('static', filename='images/hero-image1.png') }}" class="img-fluid rounded shadow" alt="Digitization Illustration">
-          </div>
+          <h5>Automated Invoice Processing</h5>
+          <p>Reduce manual data entry with AI-powered detection of invoice fields.</p>
         </div>
       </div>
-    </section>
 
-    <!-- How It Works Section -->
-    <section class="how-it-works py-5 bg-light">
-      <div class="container text-center">
-        <h2 class="mb-5">How It Works</h2>
-        <div class="row g-4">
-          <div class="col-md-6 col-lg-3">
-            <div class="p-4 bg-white rounded shadow h-100">
-              <div class="d-flex justify-content-center align-items-center bg-dark text-white rounded-circle mb-3" style="width:45px; height:45px;">1</div>
-              <h5>Upload Your Form</h5>
-              <p>Take a photo of your handwritten registration form and upload it to AksorAi.</p>
-            </div>
+      <!-- Card 2 -->
+      <div class="col-md-4">
+        <div class="adv-card p-3 rounded shadow">
+          <div class="adv-img mb-3">
+            <img src="{{ url_for('static', filename='images/image2.webp') }}" alt="High Accuracy OCR" class="img-fluid">
           </div>
-          <div class="col-md-6 col-lg-3">
-            <div class="p-4 bg-white rounded shadow h-100">
-              <div class="d-flex justify-content-center align-items-center bg-dark text-white rounded-circle mb-3" style="width:45px; height:45px;">2</div>
-              <h5>AI Detects Fields</h5>
-              <p>Our model automatically identifies Name, ID, Phone, and Email fields.</p>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-3">
-            <div class="p-4 bg-white rounded shadow h-100">
-              <div class="d-flex justify-content-center align-items-center bg-dark text-white rounded-circle mb-3" style="width:45px; height:45px;">3</div>
-              <h5>Handwriting Recognition</h5>
-              <p>Advanced CNN + OCR reads the handwritten content inside each field.</p>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-3">
-            <div class="p-4 bg-white rounded shadow h-100">
-              <div class="d-flex justify-content-center align-items-center bg-dark text-white rounded-circle mb-3" style="width:45px; height:45px;">4</div>
-              <h5>Digital Output</h5>
-              <p>Your extracted information is displayed and stored in the system.</p>
-            </div>
-          </div>
+          <h5>High Accuracy OCR</h5>
+          <p>Extract names, amounts, and dates reliably from invoices and receipts.</p>
         </div>
       </div>
-    </section>
 
-    <!-- Features Section -->
-    <section class="features py-5">
-      <div class="container text-center">
-        <h2 class="mb-5">Why Use AksorAi?</h2>
-        <div class="row g-4">
-          <div class="col-md-4">
-            <div class="p-4 bg-white rounded shadow h-100">
-              <h5>Fast Processing</h5>
-              <p>Upload your forms and let our AI handle text extraction within seconds.</p>
-            </div>
+      <!-- Card 3 -->
+      <div class="col-md-4">
+        <div class="adv-card p-3 rounded shadow">
+          <div class="adv-img mb-3">
+            <img src="{{ url_for('static', filename='images/image4.png') }}" alt="Real-Time Insights" class="img-fluid">
           </div>
-          <div class="col-md-4">
-            <div class="p-4 bg-white rounded shadow h-100">
-              <h5>Accurate Results</h5>
-              <p>Powered by CNN models trained on diverse handwriting styles for high accuracy.</p>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="p-4 bg-white rounded shadow h-100">
-              <h5>Easy to Use</h5>
-              <p>A simple and clean interface designed for everyone — no technical experience needed.</p>
-            </div>
-          </div>
+          <h5>Real-Time Insights</h5>
+          <p>See your financial overview instantly with interactive dashboards.</p>
         </div>
       </div>
-    </section>
-  </main>
 
-  <!-- Footer -->
-  <footer class="py-4 text-black shadow-sm text-center">
-    © 2025 AksorAi — Handwritten Form Digitization
-  </footer>
+      <!-- Optional Card 4 -->
+      <div class="col-md-4">
+        <div class="adv-card p-3 rounded shadow">
+          <div class="adv-img mb-3">
+            <img src="{{ url_for('static', filename='images/image3.jpg') }}" alt="Secure Storage" class="img-fluid">
+          </div>
+          <h5>Secure Storage</h5>
+          <p>Your invoice data is encrypted and safely stored for peace of mind.</p>
+        </div>
+      </div>
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+      <!-- Optional Card 5 -->
+      <div class="col-md-4">
+        <div class="adv-card p-3 rounded shadow">
+          <div class="adv-img mb-3">
+            <img src="{{ url_for('static', filename='images/image5.png') }}" alt="Scalable for Business" class="img-fluid">
+          </div>
+          <h5>Scalable for Businesses</h5>
+          <p>From 1 invoice to 10,000+, our system handles it efficiently.</p>
+        </div>
+      </div>
+
+      <!-- Optional Card 6 -->
+      <div class="col-md-4">
+        <div class="adv-card p-3 rounded shadow">
+          <div class="adv-img mb-3">
+            <img src="{{ url_for('static', filename='images/image6.png') }}" alt="User-Friendly" class="img-fluid">
+          </div>
+          <h5>User-Friendly Interface</h5>
+          <p>Intuitive design for everyone — no technical experience needed.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <a href="/upload" class="btn btn-warning btn-lg mt-5">Get Started</a>
+  </div>
+</section>
+
+
+
+<!-- PRICING -->
+<section class="py-5 container">
+  <h2 class="fw-bold text-center mb-4">Pricing & Subscription</h2>
+  <p class="text-center mb-5">
+    Free users can store up to <strong>30 invoices</strong>. Upgrade for more.
+  </p>
+
+  <div class="row justify-content-center g-4">
+    <div class="col-md-4">
+      <div class="pricing-box text-center p-4 shadow-sm">
+        <h4>Free Plan</h4>
+        <p>Store up to 30 invoices</p>
+        <h2>$0</h2>
+        <button class="btn btn-dark w-100 mt-3">Start Free</button>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="pricing-box text-center p-4 shadow-sm premium-plan">
+        <h4>Premium Plan</h4>
+        <p>Unlimited invoices + full analytics</p>
+        <h2>$5/month</h2>
+        <button class="btn btn-light w-100 mt-3">Upgrade Now</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer mt-5 py-4">
+  <div class="container">
+    <div class="row text-center text-md-start">
+
+      <div class="col-md-3 mb-3">
+        <h5>Invoxia</h5>
+        <p>Smart invoice digitization & finance tracker powered by AI.</p>
+      </div>
+
+      <div class="col-md-3 mb-3">
+        <h5>Contact</h5>
+        <p>Email: support@invoxia.com</p>
+        <p>Location: Phnom Penh, Cambodia</p>
+      </div>
+
+      <div class="col-md-3 mb-3">
+        <h5>Follow Us</h5>
+        <p>Facebook</p>
+        <p>LinkedIn</p>
+        <p>Instagram</p>
+      </div>
+
+      <div class="col-md-3 mb-3">
+        <h5>Stay Updated</h5>
+        <input type="email" class="form-control mb-2" placeholder="Enter your email">
+        <button class="btn btn-light w-100">Subscribe</button>
+      </div>
+
+    </div>
+
+    <div class="text-center mt-4">
+      © 2025 Invoxia — All Rights Reserved
+    </div>
+  </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Custom JS -->
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
 </body>
 </html>

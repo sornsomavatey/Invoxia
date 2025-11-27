@@ -1,79 +1,20 @@
-/* upload.css - specific to Upload page */
-
-
-/* Buttons */
-.btn-primary, .cta-btn {
-    background-color:  #162a47;
-    border: none;
-    border-radius: 10px;
-    transition: all 0.3s ease;
+.upload-page {
+  background: #0e0e10;
+  color: #fff;
 }
 
-.btn-primary:hover, .cta-btn:hover {
-    background-color: #162a47;
-    transform: scale(1.05);
+.upload-box {
+  background: #141417;
+  border: 2px dashed rgba(255,215,0,0.5);
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
 }
 
-/* Tips / Cards hover effect */
-.hover-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
-    transition: all 0.3s ease;
+.upload-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(255,215,0,0.3);
 }
 
-/* Headings */
-h2 {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    color: #10223e;
+.progress-bar {
+  background-color: #ffd700;
 }
-
-h5 {
-    color: #10223e;
-    font-weight: 600;
-}
-
-/* Table styling */
-.table th, .table td {
-    vertical-align: middle;
-}
-
-.table-hover tbody tr:hover {
-    background-color: #f1f3f6;
-}
-
-
-
-/* Preview Image */
-#preview {
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-}
-
-/* Responsive tweaks */
-@media (max-width: 768px){
-    .hover-card {
-        margin-bottom: 20px;
-    }
-}
-
-/* Preview image */
-#preview {
-    max-height: 300px;
-    display: none;
-    margin-top: 15px;
-    border-radius: 10px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-}
-
-/* Upload form */
-form.bg-white {
-    transition: all 0.3s ease;
-}
-
-form.bg-white:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-}
-
-

@@ -1,0 +1,104 @@
+/* analytics.css */
+
+/* General Page Styles */
+.analytics-page {
+    background-color: #1c1c1e; /* Dark luxury background */
+    color: #ffffff;
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+}
+
+.analytics-page h2 {
+    font-weight: 700;
+    color: #ffd700; /* Gold accent for headings */
+}
+
+.analytics-page h5 {
+    font-weight: 600;
+    color: #ffd700;
+}
+
+/* KPI Cards */
+.analytics-page .card {
+    background-color: #2a2a2e; /* Slightly lighter dark for cards */
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.analytics-page .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(255,215,0,0.4);
+}
+
+.analytics-page .card i {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    color: #ffd700; /* Icon gold accent */
+}
+
+.analytics-page .card h3 {
+    font-weight: 700;
+    color: #ffffff;
+}
+
+/* Charts Section */
+.analytics-page .card canvas {
+    background-color: #1c1c1e;
+    border-radius: 1rem;
+    padding: 1rem;
+}
+
+.analytics-page .card canvas:focus {
+    outline: none;
+}
+
+/* Table Styles */
+.analytics-page .table {
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.analytics-page .table th,
+.analytics-page .table td {
+    border: none;
+}
+
+.analytics-page .table-dark {
+    background-color: #2a2a2e;
+    color: #ffffff;
+}
+
+.analytics-page .table-dark tbody tr:hover {
+    background-color: rgba(255, 215, 0, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .analytics-page h2 {
+        font-size: 1.8rem;
+    }
+    .analytics-page .card i {
+        font-size: 2.5rem;
+    }
+}
+
+/* Optional: Add subtle background pattern or gradient */
+.analytics-page {
+    background: linear-gradient(180deg, #1c1c1e 0%, #121212 100%);
+}
+
+/* Scrollbar customization for luxury feel */
+.analytics-page::-webkit-scrollbar {
+    width: 8px;
+}
+
+.analytics-page::-webkit-scrollbar-track {
+    background: #1c1c1e;
+}
+
+.analytics-page::-webkit-scrollbar-thumb {
+    background-color: #ffd700;
+    border-radius: 4px;
+}
