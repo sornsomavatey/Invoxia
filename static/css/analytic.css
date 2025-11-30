@@ -1,104 +1,111 @@
-/* analytics.css */
 
-/* General Page Styles */
-.analytics-page {
-    background-color: #1c1c1e; /* Dark luxury background */
-    color: #ffffff;
-    min-height: 100vh;
-    font-family: 'Poppins', sans-serif;
+.pricing-hero {
+    background-image: url("../images/hero-image1-min.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 350px;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    margin-bottom: 40px;
+}
+/* Floating icons */
+.floating-icon {
+    position: absolute;
+    width: 60px;
+    opacity: 0.2;
+    animation: floatAnim 6s ease-in-out infinite alternate;
+}
+@keyframes floatAnim {
+    0% { transform: translateY(0) rotate(0deg);}
+    50% { transform: translateY(-15px) rotate(10deg);}
+    100% { transform: translateY(0) rotate(-10deg);}
 }
 
-.analytics-page h2 {
-    font-weight: 700;
-    color: #ffd700; /* Gold accent for headings */
-}
 
-.analytics-page h5 {
-    font-weight: 600;
-    color: #ffd700;
-}
-
-/* KPI Cards */
-.analytics-page .card {
-    background-color: #2a2a2e; /* Slightly lighter dark for cards */
-    border: none;
-    border-radius: 1rem;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+/* GLASS METRIC CARDS */
+.metric-card.glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
-.analytics-page .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(255,215,0,0.4);
+.metric-card.glass:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
 }
 
-.analytics-page .card i {
+/* ICON CIRCLES */
+.icon-circle {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin: 0 auto;
+}
+
+/* MODERN TABLE */
+.table-card {
+    background: #ffffff;
+    border-radius: 16px;
+}
+.modern-table thead {
+    background: #f5f6fa;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.modern-table tbody tr {
+    border-bottom: 1px solid #e8e8e8;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+.modern-table tbody tr:hover {
+    background: #f1f7ff;
+    transform: translateY(-2px);
+}
+
+/* BADGES */
+.badge {
+    font-weight: 500;
+    padding: 0.45rem 0.8rem;
+    font-size: 0.85rem;
+}
+
+/* HERO TEXT */
+.analytics-hero h1 {
     font-size: 3rem;
-    margin-bottom: 0.5rem;
-    color: #ffd700; /* Icon gold accent */
-}
-
-.analytics-page .card h3 {
+    letter-spacing: -1px;
     font-weight: 700;
-    color: #ffffff;
+}
+.analytics-hero p {
+    font-size: 1.25rem;
 }
 
-/* Charts Section */
-.analytics-page .card canvas {
-    background-color: #1c1c1e;
-    border-radius: 1rem;
-    padding: 1rem;
+/* BODY TYPOGRAPHY */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #1a1a1a;
+}
+h2, h5 {
+  font-weight: 600;
+  color: #ffffff;
 }
 
-.analytics-page .card canvas:focus {
-    outline: none;
+/* FOOTER */
+.footer {
+    background: #1a1a1a;
+    color: #fff;
 }
-
-/* Table Styles */
-.analytics-page .table {
+.footer h5 {
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+.footer input.form-control {
     border-radius: 0.5rem;
-    overflow: hidden;
 }
-
-.analytics-page .table th,
-.analytics-page .table td {
-    border: none;
-}
-
-.analytics-page .table-dark {
-    background-color: #2a2a2e;
-    color: #ffffff;
-}
-
-.analytics-page .table-dark tbody tr:hover {
-    background-color: rgba(255, 215, 0, 0.1);
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .analytics-page h2 {
-        font-size: 1.8rem;
-    }
-    .analytics-page .card i {
-        font-size: 2.5rem;
-    }
-}
-
-/* Optional: Add subtle background pattern or gradient */
-.analytics-page {
-    background: linear-gradient(180deg, #1c1c1e 0%, #121212 100%);
-}
-
-/* Scrollbar customization for luxury feel */
-.analytics-page::-webkit-scrollbar {
-    width: 8px;
-}
-
-.analytics-page::-webkit-scrollbar-track {
-    background: #1c1c1e;
-}
-
-.analytics-page::-webkit-scrollbar-thumb {
-    background-color: #ffd700;
-    border-radius: 4px;
+.footer button.btn {
+    border-radius: 0.5rem;
 }

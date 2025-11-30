@@ -1,0 +1,9 @@
+.pricing-hero {
+    background-image: url("../images/hero-image1-min.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 350px;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}

@@ -3,31 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Invoxia – Invoice Intelligence System</title>
+  <title>Invoxia – Analytics Dashboard</title>
 
   <!-- Bootstrap -->
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  >
-  <!-- Bootstrap Icons -->
-<link
-  href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
-  rel="stylesheet"
-/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 
-  <!-- Google Font -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
-    rel="stylesheet"
-  >
-
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
   <!-- Custom CSS -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/analytic.css') }}">
 </head>
-
 <body>
 
 <!-- NAVBAR -->
@@ -47,7 +35,7 @@
           <a class="nav-link" href="/upload">Upload Invoice</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/analytics">Analytics</a>
+          <a class="nav-link" href="/analytic">Analytics</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/pricing">Pricing</a>
@@ -59,87 +47,101 @@
     </div>
   </div>
 </nav>
-<section class="analytics-page py-5 bg-dark text-white">
+
+<!-- HERO -->
+<section class="pricing-hero text-center text-white d-flex align-items-center">
   <div class="container">
-    <h2 class="text-center mb-5">Analytics Dashboard</h2>
+    <h1 class="fw-bold">Your Spending at a Glance</h1>
+    <p class="lead mt-3">
+      Smart insights from all your uploaded invoices
+    </p>
+  </div>
+</section>
+<section>
+  <!-- Decorative Floating Icons -->
+  <img src="{{ url_for('static', filename='images/floating_invoice.png') }}" class="floating-icon top-0 start-0">
+  <img src="{{ url_for('static', filename='images/floating_money.png') }}" class="floating-icon bottom-0 end-0">
+</section>
 
-    <!-- Key Metrics -->
-    <div class="row g-4 mb-5">
-      <div class="col-md-3">
-        <div class="card bg-dark shadow rounded p-3 text-center">
-          <i class="bi bi-file-text-fill display-6 text-warning"></i>
-          <h5 class="mt-2">Invoices Processed</h5>
-          <h3>1,245</h3>
+<!-- METRICS -->
+<section class="container mb-5">
+  <div class="row g-4">
+
+    <div class="col-md-6 col-lg-3">
+      <div class="metric-card glass text-center p-4" style="background: linear-gradient(135deg, #c93e2b, #e5c5bc);">
+        <div class="icon-circle mb-3 bg-white shadow-sm">
+          <i class="bi bi-file-text-fill text-warning display-5"></i>
         </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card bg-dark shadow rounded p-3 text-center">
-          <i class="bi bi-currency-dollar display-6 text-warning"></i>
-          <h5 class="mt-2">Total Amount</h5>
-          <h3>$125,400</h3>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card bg-dark shadow rounded p-3 text-center">
-          <i class="bi bi-hourglass-split display-6 text-warning"></i>
-          <h5 class="mt-2">Pending Invoices</h5>
-          <h3>24</h3>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card bg-dark shadow rounded p-3 text-center">
-          <i class="bi bi-speedometer2 display-6 text-warning"></i>
-          <h5 class="mt-2">Avg. Processing Time</h5>
-          <h3>2.5 min</h3>
-        </div>
+        <h6 class="text-uppercase opacity-75 mb-1">Invoices Processed</h6>
+        <h2 class="fw-semi-bold countup">{{ invoice_count }}</h2>
       </div>
     </div>
 
-    <!-- Charts Section -->
-    <div class="row g-4 mb-5">
-      <div class="col-md-6">
-        <div class="card bg-dark shadow rounded p-3">
-          <h5 class="mb-3">Invoices Over Time</h5>
-          <canvas id="lineChart"></canvas>
+    <div class="col-md-6 col-lg-3">
+      <div class="metric-card glass text-center p-4" style="background: linear-gradient(135deg, #ff9a9e, #fad0c4);">
+        <div class="icon-circle mb-3 bg-white shadow-sm">
+          <i class="bi bi-currency-dollar text-warning display-5"></i>
         </div>
-      </div>
-      <div class="col-md-6">
-        <div class="card bg-dark shadow rounded p-3">
-          <h5 class="mb-3">Amount by Client</h5>
-          <canvas id="barChart"></canvas>
-        </div>
+        <h6 class="text-uppercase opacity-75 mb-1">Total Amount</h6>
+        <h2 class="fw-semi-bold countup">${{ total_amount }}</h2>
       </div>
     </div>
 
-    <!-- Recent Uploads Table -->
-    <div class="card bg-dark shadow rounded p-3">
-      <h5 class="mb-3">Recent Uploaded Invoices</h5>
+    <div class="col-md-6 col-lg-3">
+      <div class="metric-card glass text-center p-4" style="background: linear-gradient(135deg, #a1c4fd, #c2e9fb);">
+        <div class="icon-circle mb-3 bg-white shadow-sm">
+          <i class="bi bi-hourglass-split text-warning display-5"></i>
+        </div>
+        <h6 class="text-uppercase opacity-75 mb-1">Pending Invoices</h6>
+        <h2 class="fw-semi-bold countup">{{ pending_count }}</h2>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+      <div class="metric-card glass text-center p-4" style="background: linear-gradient(135deg, #fbc2eb, #a6c1ee);">
+        <div class="icon-circle mb-3 bg-white shadow-sm">
+          <i class="bi bi-speedometer2 text-warning display-5"></i>
+        </div>
+        <h6 class="text-uppercase opacity-75 mb-1">Avg. Processing Time</h6>
+        <h2 class="fw-semi-bold countup">{{ avg_processing_time }} sec</h2>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- RECENT INVOICES TABLE -->
+<section class="container mb-5">
+  <div class="card shadow-lg rounded-4 border-0 table-card">
+    <div class="card-body p-4">
+      <h4 class="fw-bold mb-3">Recent Uploaded Invoices</h4>
       <div class="table-responsive">
-        <table class="table table-dark table-striped text-white">
+        <table class="table modern-table align-middle">
           <thead>
             <tr>
               <th>Invoice ID</th>
-              <th>Client</th>
+              <th>Vendor</th>
               <th>Date</th>
               <th>Amount</th>
               <th>Status</th>
             </tr>
           </thead>
           <tbody>
+            {% for invoice in recent_invoices %}
             <tr>
-              <td>INV-1001</td>
-              <td>Acme Corp</td>
-              <td>2025-11-25</td>
-              <td>$5,400</td>
-              <td>Processed</td>
+              <td>#{{ invoice.id }}</td>
+              <td>{{ invoice.vendor }}</td>
+              <td>{{ invoice.date }}</td>
+              <td>${{ invoice.total }}</td>
+              <td>
+                {% if invoice.status == 'Processed' %}
+                  <span class="badge bg-success">Processed</span>
+                {% else %}
+                  <span class="badge bg-warning text-dark">Pending</span>
+                {% endif %}
+              </td>
             </tr>
-            <tr>
-              <td>INV-1002</td>
-              <td>Beta LLC</td>
-              <td>2025-11-25</td>
-              <td>$2,350</td>
-              <td>Pending</td>
-            </tr>
+            {% endfor %}
           </tbody>
         </table>
       </div>
@@ -147,38 +149,31 @@
   </div>
 </section>
 
-
 <!-- FOOTER -->
-<footer class="footer mt-5 py-4">
+<footer class="footer mt-5 py-4 bg-dark text-white">
   <div class="container">
     <div class="row text-center text-md-start">
-
       <div class="col-md-3 mb-3">
         <h5>Invoxia</h5>
         <p>Smart invoice digitization & finance tracker powered by AI.</p>
       </div>
-
       <div class="col-md-3 mb-3">
         <h5>Contact</h5>
         <p>Email: support@invoxia.com</p>
         <p>Location: Phnom Penh, Cambodia</p>
       </div>
-
       <div class="col-md-3 mb-3">
         <h5>Follow Us</h5>
         <p>Facebook</p>
         <p>LinkedIn</p>
         <p>Instagram</p>
       </div>
-
       <div class="col-md-3 mb-3">
         <h5>Stay Updated</h5>
         <input type="email" class="form-control mb-2" placeholder="Enter your email">
         <button class="btn btn-light w-100">Subscribe</button>
       </div>
-
     </div>
-
     <div class="text-center mt-4">
       © 2025 Invoxia — All Rights Reserved
     </div>
@@ -187,9 +182,12 @@
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- Custom JS -->
-<script src="{{ url_for('static', filename='js/analytic.js') }}"></script>
-
+<!-- CountUp.js for animated metrics -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/countup.js/2.2.0/countUp.min.js"></script>
+<script>
+  document.querySelectorAll('.countup').forEach(el => {
+    new CountUp(el, parseFloat(el.innerText.replace(/[$,]/g,''))).start();
+  });
+</script>
 </body>
 </html>
