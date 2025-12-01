@@ -7,3 +7,27 @@
     padding-top: 3rem;
     padding-bottom: 3rem;
 }
+/* Collapsed (default) buttons */
+.accordion-button.collapsed {
+  background-color: #fff; /* dark */
+  color: #222;
+}
+
+/* Expanded (clicked/opened) buttons */
+.accordion-button:not(.collapsed) {
+  background: linear-gradient(135deg, #ffd445, #ad8310); /* bright gold with highlights */
+  color: #000;
+}
+
+/* Remove focus shadow */
+.accordion-button:focus {
+  box-shadow: none;
+}
+.premium-plan {
+  background: linear-gradient(135deg, #ffd445, #ad8310);
+  color: #000;
+}
+.free-enter-plan {
+  background: linear-gradient(135deg, #87bfff, #1e3145);
+  color: #fff;
+}

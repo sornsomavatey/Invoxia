@@ -125,7 +125,7 @@ p {
 }
 
 .pricing-box h2 {
-  color: #d4af37;
+  color: #ffcf31;
 }
 
 .premium-plan {
@@ -195,6 +195,11 @@ input[type="file"] {
   color: #fff;
   padding: 10px;
   border-radius: 6px;
+}
+/* Make placeholder fully white */
+.form-control::placeholder {
+  color: #ffffff !important;
+  opacity: 1;
 }
 
 /* Shadows */
