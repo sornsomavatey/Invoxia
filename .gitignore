@@ -32,6 +32,10 @@ instance/
 uploads/*
 !uploads/.gitkeep
 
+# Model files (large files)
+models/model.safetensors
+models/*.safetensors
+
 # Environment variables
 .env
 .env.local
