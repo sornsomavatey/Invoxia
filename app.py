@@ -2,15 +2,21 @@ from flask import Flask, render_template, request, jsonify, send_from_directory
 import os
 from werkzeug.utils import secure_filename
 from datetime import datetime
+from pymongo import MongoClient
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # --------------------------------------
-# TEMPORARY IN-MEMORY "DATABASE"
+# MONGODB SETUP (NEW)
 # --------------------------------------
-invoices_db = []   # list of dicts: {id, vendor, date, total, status, processing_time}
+# Use env var if set, otherwise default to local MongoDB
+MONGO_URI = "mongodb+srv://mrznak88k_db_user:Naknak11@cluster0.vymj79i.mongodb.net/invoice_app?retryWrites=true&w=majority&appName=Cluster0"
+
+client = MongoClient(MONGO_URI)
+db = client["invoice_app"]
+invoices_col = db["invoices"]  # collection name
 
 
 # ---------- FRONTEND ROUTES ----------
@@ -34,34 +40,47 @@ def show_uploads():
 
 
 # --------------------------------------
-# ANALYTICS PAGE
+# ANALYTICS PAGE (CHANGED TO USE MONGO)
 # --------------------------------------
 @app.route('/analytic')
 def analytic_page():
+    # Get all invoices from MongoDB
+    invoices = list(invoices_col.find({}))
 
-    invoice_count = len(invoices_db)
-    total_amount = sum(inv["total"] for inv in invoices_db)
-    pending_count = sum(1 for inv in invoices_db if inv["status"] == "Pending")
-    recent_invoices = invoices_db[-5:]
+    # Optional: convert _id to string so templates / JSON don’t show ObjectId(...)
+    for inv in invoices:
+        inv["_id"] = str(inv["_id"])
+
+    invoice_count = len(invoices)
+    total_amount_value = sum(inv.get("total", 0) for inv in invoices)
+    pending_count = sum(1 for inv in invoices if inv.get("status") == "Pending")
+    recent_invoices = invoices[-5:]
 
     avg_processing_time = (
-        sum(inv["processing_time"] for inv in invoices_db) / invoice_count
+        sum(inv.get("processing_time", 0) for inv in invoices) / invoice_count
         if invoice_count > 0 else 0
     )
 
     return render_template(
-        "analytic.html",          # 👈 correct file name
+        "analytic.html",
         invoice_count=invoice_count,
-        total_amount=f"{total_amount:,.2f}",
+        total_amount=f"{total_amount_value:,.2f}",
         pending_count=pending_count,
         recent_invoices=recent_invoices,
         avg_processing_time=round(avg_processing_time, 2)
     )
 
+@app.route("/db-test")
+def db_test():
+    try:
+        count = invoices_col.count_documents({})
+        return f"DB OK. invoices count = {count}"
+    except Exception as e:
+        return f"DB ERROR: {e}", 500
 
 
 # --------------------------------------
-# IMAGE UPLOAD + CREATE NEW INVOICE
+# IMAGE UPLOAD + CREATE NEW INVOICE (CHANGED TO USE MONGO)
 # --------------------------------------
 @app.route('/api/upload', methods=['POST'])
 def api_upload_file():
@@ -76,20 +95,24 @@ def api_upload_file():
     file_path = os.path.join(UPLOAD_FOLDER, filename)
     file.save(file_path)
 
-    # --------------------------------------------------------------
-    # TODO: Replace this with OCR extraction
-    # For now, we generate a fake invoice entry
-    # --------------------------------------------------------------
+    # Count existing invoices to generate a simple incremental ID similar to before
+    existing_count = invoices_col.count_documents({})
+    invoice_id = f"INV-{1000 + existing_count + 1}"
+
     new_invoice = {
-        "id": f"INV-{1000 + len(invoices_db) + 1}",
-        "vendor": "Unknown Vendor",
+        "id": invoice_id,
+        "filename": filename,
+        "file_path": file_path,
+        "vendor": "Unknown Vendor",                 # TODO: replace with OCR output
         "date": datetime.now().strftime("%Y-%m-%d"),
-        "total": 12.50,          # <-- replace with OCR amount
+        "total": 12.50,                             # TODO: replace with OCR amount
         "status": "Processed",
-        "processing_time": 2.5   # example seconds
+        "processing_time": 2.5,                     # example seconds
+        "created_at": datetime.now()
     }
 
-    invoices_db.append(new_invoice)
+    result = invoices_col.insert_one(new_invoice)
+    new_invoice["_id"] = str(result.inserted_id)
 
     return jsonify({
         'message': 'File uploaded successfully',
@@ -105,6 +128,7 @@ def uploaded_file(filename):
 @app.route('/pricing')
 def pricing_page():
     return render_template('pricing.html')
+
 
 
 if __name__ == '__main__':
