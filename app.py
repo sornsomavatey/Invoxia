@@ -5,7 +5,7 @@ from datetime import datetime
 from pymongo import MongoClient
 
 app = Flask(__name__)
-UPLOAD_FOLDER = 'uploads'
+UPLOAD_FOLDER = os.path.join(app.root_path, 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # --------------------------------------
