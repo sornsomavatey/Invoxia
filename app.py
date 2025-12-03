@@ -11,7 +11,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 # --------------------------------------
 # MONGODB SETUP (NEW)
 # --------------------------------------
-# Use env var if set, otherwise default to local MongoDB.
+# Use env var if set, otherwise default to local MongoDB
 MONGO_URI = "mongodb+srv://mrznak88k_db_user:Naknak11@cluster0.vymj79i.mongodb.net/invoice_app?retryWrites=true&w=majority&appName=Cluster0"
 
 client = MongoClient(MONGO_URI)
