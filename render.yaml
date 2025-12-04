@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: invoxia
+    runtime: python
+    pythonVersion: 3.11.9  # 👈 key line
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app  # or whatever your main module is
