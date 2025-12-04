@@ -57,7 +57,8 @@ except Exception as e:
 # --------------------------------------
 print("Loading LayoutLMv3 model...")
 MODEL_PATH = "models"
-processor = LayoutLMv3Processor.from_pretrained(MODEL_PATH, apply_ocr=True)
+BASE_MODEL_NAME = "microsoft/layoutlmv3-base"
+processor = LayoutLMv3Processor.from_pretrained(BASE_MODEL_NAME, apply_ocr=True)
 model = LayoutLMv3ForTokenClassification.from_pretrained(MODEL_PATH)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model.to(device)
