@@ -7,10 +7,50 @@ from PIL import Image
 from transformers import LayoutLMv3Processor, LayoutLMv3ForTokenClassification
 import re
 import time
+from pymongo import MongoClient
+from dotenv import load_dotenv
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
+import csv
+import io
+
+# Load environment variables
+load_dotenv()
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+# --------------------------------------
+# MONGODB CONNECTION
+# --------------------------------------
+MONGO_URI = os.getenv('MONGO_URI', 'mongodb://localhost:27017/')
+DATABASE_NAME = os.getenv('DATABASE_NAME', 'invoxia_db')
+COLLECTION_NAME = os.getenv('COLLECTION_NAME', 'invoices')
+
+# --------------------------------------
+# EMAIL CONFIGURATION
+# --------------------------------------
+SMTP_SERVER = os.getenv('SMTP_SERVER', 'smtp.gmail.com')
+SMTP_PORT = int(os.getenv('SMTP_PORT', '587'))
+SMTP_USERNAME = os.getenv('SMTP_USERNAME', '')
+SMTP_PASSWORD = os.getenv('SMTP_PASSWORD', '')
+RECIPIENT_EMAIL = os.getenv('RECIPIENT_EMAIL', '')
+
+try:
+    client = MongoClient(MONGO_URI)
+    db = client[DATABASE_NAME]
+    invoices_collection = db[COLLECTION_NAME]
+    # Test connection
+    client.admin.command('ping')
+    print(f"✓ Connected to MongoDB: {DATABASE_NAME}")
+except Exception as e:
+    print(f"✗ MongoDB connection failed: {e}")
+    print("  Running without database - data will not persist")
+    invoices_collection = None
 
 # --------------------------------------
 # LOAD MODEL & PROCESSOR
@@ -24,10 +64,7 @@ model.to(device)
 model.eval()
 print(f"Model loaded successfully on {device}")
 
-# --------------------------------------
-# TEMPORARY IN-MEMORY "DATABASE"
-# --------------------------------------
-invoices_db = []   # list of dicts: {id, vendor, date, total, status, processing_time}
+# No longer using in-memory list - using MongoDB instead
 
 
 # ---------- FRONTEND ROUTES ----------
@@ -55,19 +92,34 @@ def show_uploads():
 # --------------------------------------
 @app.route('/analytic')
 def analytic_page():
-
-    invoice_count = len(invoices_db)
-    total_amount = sum(inv["total"] for inv in invoices_db)
-    pending_count = sum(1 for inv in invoices_db if inv["status"] == "Pending")
-    recent_invoices = invoices_db[-5:]
-
+    if invoices_collection is None:
+        # Fallback if MongoDB is not connected
+        return render_template(
+            "analytic.html",
+            invoice_count=0,
+            total_amount="0.00",
+            pending_count=0,
+            recent_invoices=[],
+            avg_processing_time=0
+        )
+    
+    # Get all invoices from MongoDB
+    all_invoices = list(invoices_collection.find())
+    
+    invoice_count = len(all_invoices)
+    total_amount = sum(inv.get("total", 0) for inv in all_invoices)
+    pending_count = sum(1 for inv in all_invoices if inv.get("status") == "Pending")
+    
+    # Get 5 most recent invoices (sorted by _id descending)
+    recent_invoices = list(invoices_collection.find().sort("_id", -1).limit(5))
+    
     avg_processing_time = (
-        sum(inv["processing_time"] for inv in invoices_db) / invoice_count
+        sum(inv.get("processing_time", 0) for inv in all_invoices) / invoice_count
         if invoice_count > 0 else 0
     )
 
     return render_template(
-        "analytic.html",          # 👈 correct file name
+        "analytic.html",
         invoice_count=invoice_count,
         total_amount=f"{total_amount:,.2f}",
         pending_count=pending_count,
@@ -276,6 +328,120 @@ def extract_invoice_number(text):
     
     return ""
 
+
+# --------------------------------------
+# CSV GENERATION FOR EMAIL ATTACHMENT
+# --------------------------------------
+def generate_invoice_csv():
+    """Generate CSV file with all invoices and total sum"""
+    if invoices_collection is None:
+        return None
+    
+    # Get all invoices from MongoDB
+    all_invoices = list(invoices_collection.find().sort("_id", 1))
+    
+    if not all_invoices:
+        return None
+    
+    # Create CSV in memory
+    output = io.StringIO()
+    writer = csv.writer(output)
+    
+    # Write header
+    writer.writerow(['Invoice ID', 'Vendor', 'Date', 'Amount'])
+    
+    # Write invoice data and calculate total
+    total_amount = 0.0
+    for invoice in all_invoices:
+        invoice_id = invoice.get('id', 'N/A')
+        vendor = invoice.get('vendor', 'Unknown')
+        date = invoice.get('date', 'N/A')
+        amount = invoice.get('total', 0.0)
+        total_amount += amount
+        
+        writer.writerow([invoice_id, vendor, date, f"${amount:.2f}"])
+    
+    # Write total row
+    writer.writerow(['', '', 'TOTAL:', f"${total_amount:.2f}"])
+    
+    # Get CSV content as bytes
+    csv_content = output.getvalue()
+    output.close()
+    
+    return csv_content.encode('utf-8')
+
+
+# --------------------------------------
+# EMAIL NOTIFICATION
+# --------------------------------------
+def send_invoice_notification(new_invoice, total_all_invoices):
+    """Send email notification when a new invoice is uploaded"""
+    
+    # Skip if email not configured
+    if not SMTP_USERNAME or not SMTP_PASSWORD or not RECIPIENT_EMAIL:
+        print("⚠ Email not configured - skipping notification")
+        return False
+    
+    try:
+        # Create message
+        msg = MIMEMultipart()
+        msg['From'] = f"Invoxia Support <{SMTP_USERNAME}>"
+        msg['To'] = RECIPIENT_EMAIL
+        msg['Subject'] = f"New Invoice Uploaded - {new_invoice['id']}"
+        
+        # Email body
+        body = f"""
+Hello,
+
+A new invoice has been uploaded and processed successfully.
+
+📄 Invoice Details:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Invoice ID:      {new_invoice['id']}
+Vendor:          {new_invoice['vendor']}
+Date:            {new_invoice['date']}
+Amount:          ${new_invoice['total']:.2f}
+Status:          {new_invoice['status']}
+Processing Time: {new_invoice['processing_time']}s
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💰 Total Amount (All Invoices): ${total_all_invoices:.2f}
+
+📊 A complete invoice history CSV is attached to this email.
+
+---
+This is an automated notification from Invoxia Invoice Processing System.
+"""
+        
+        msg.attach(MIMEText(body, 'plain'))
+        
+        # Generate and attach CSV
+        csv_data = generate_invoice_csv()
+        if csv_data:
+            attachment = MIMEBase('application', 'octet-stream')
+            attachment.set_payload(csv_data)
+            encoders.encode_base64(attachment)
+            
+            # Generate filename with timestamp
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"invoice_history_{timestamp}.csv"
+            attachment.add_header('Content-Disposition', f'attachment; filename={filename}')
+            msg.attach(attachment)
+        
+        # Send email
+        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+        server.starttls()
+        server.login(SMTP_USERNAME, SMTP_PASSWORD)
+        server.send_message(msg)
+        server.quit()
+        
+        print(f"✓ Email notification sent to {RECIPIENT_EMAIL}")
+        return True
+        
+    except Exception as e:
+        print(f"✗ Failed to send email: {e}")
+        return False
+
 # --------------------------------------
 # IMAGE UPLOAD + CREATE NEW INVOICE
 # --------------------------------------
@@ -297,18 +463,42 @@ def api_upload_file():
     extracted_data = extract_invoice_data(file_path)
     processing_time = round(time.time() - start_time, 2)
     
+    # Get current count from MongoDB for ID generation
+    if invoices_collection is not None:
+        invoice_count = invoices_collection.count_documents({})
+    else:
+        invoice_count = 0
+    
+    # Generate auto-incrementing invoice ID (INV-001, INV-002, etc.)
+    auto_invoice_id = f"INV-{str(invoice_count + 1).zfill(3)}"
+    
     # Create invoice entry with extracted data
     new_invoice = {
-        "id": extracted_data.get("invoice_number") or f"INV-{1000 + len(invoices_db) + 1}",
+        "id": auto_invoice_id,
         "vendor": extracted_data.get("vendor", "Unknown Vendor"),
         "date": extracted_data.get("date", datetime.now().strftime("%Y-%m-%d")),
         "total": extracted_data.get("total", 0.0),
         "status": "Processed",
         "processing_time": processing_time,
-        "raw_text": extracted_data.get("raw_text", "")
+        "raw_text": extracted_data.get("raw_text", ""),
+        "filename": filename,
+        "uploaded_at": datetime.now()
     }
 
-    invoices_db.append(new_invoice)
+    # Save to MongoDB
+    if invoices_collection is not None:
+        result = invoices_collection.insert_one(new_invoice)
+        new_invoice['_id'] = str(result.inserted_id)  # Convert ObjectId to string for JSON
+        print(f"✓ Invoice saved to MongoDB with ID: {result.inserted_id}")
+        
+        # Calculate total of all invoices
+        all_invoices = list(invoices_collection.find())
+        total_all_invoices = sum(inv.get("total", 0) for inv in all_invoices)
+        
+        # Send email notification
+        send_invoice_notification(new_invoice, total_all_invoices)
+    else:
+        print("✗ MongoDB not available - invoice not saved")
 
     return jsonify({
         'message': 'File uploaded and processed successfully',
