@@ -11,6 +11,10 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 # TEMPORARY IN-MEMORY "DATABASE"
 # --------------------------------------
 invoices_db = []   # list of dicts: {id, vendor, date, total, status, processing_time}
+# --------------------------------------
+# TEMPORARY USER "DATABASE"
+# --------------------------------------
+users_db = []   # list of dicts: {name, email, password, birthday}
 
 
 # ---------- FRONTEND ROUTES ----------
