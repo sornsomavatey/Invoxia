@@ -11,20 +11,11 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 # --------------------------------------
 # MONGODB SETUP (NEW)
 # --------------------------------------
-<<<<<<< HEAD
 invoices_db = []   # list of dicts: {id, vendor, date, total, status, processing_time}
 # --------------------------------------
 # TEMPORARY USER "DATABASE"
 # --------------------------------------
 users_db = []   # list of dicts: {name, email, password, birthday}
-=======
-# Use env var if set, otherwise default to local MongoDB
-MONGO_URI = "mongodb+srv://mrznak88k_db_user:Naknak11@cluster0.vymj79i.mongodb.net/invoice_app?retryWrites=true&w=majority&appName=Cluster0"
-
-client = MongoClient(MONGO_URI)
-db = client["invoice_app"]
-invoices_col = db["invoices"]  
->>>>>>> 0971ee7a2496cf5a42af96ad5a658a1ba7acac01
 
 
 # ---------- FRONTEND ROUTES ----------

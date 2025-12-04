@@ -54,7 +54,6 @@ async function uploadInvoice() {
     showToast("Error processing invoice: Upload failed", "error");
   }
 }
-<<<<<<< HEAD
 
 
 // ---------------------------
@@ -75,5 +74,3 @@ window.previewInvoice = previewInvoice;
 window.uploadInvoice = uploadInvoice;
 window.selectPlan = selectPlan;
 window.closeSubscription = closeSubscription;
-=======
->>>>>>> 0971ee7a2496cf5a42af96ad5a658a1ba7acac01
