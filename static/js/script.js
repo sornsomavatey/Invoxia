@@ -1,157 +1,60 @@
-// ---------------------------
-// Smooth Scroll Animation
-// ---------------------------
-document.addEventListener("DOMContentLoaded", () => {
-  const scrollLinks = document.querySelectorAll("a[href^='#']");
-  scrollLinks.forEach(link => {
-    link.addEventListener("click", e => {
-      e.preventDefault();
-      const section = document.querySelector(link.getAttribute("href"));
-      if (section) {
-        section.scrollIntoView({ behavior: "smooth" });
-      }
-    });
-  });
-});
-
-
-// ---------------------------
-// Navbar Shadow on Scroll
-// ---------------------------
-window.addEventListener("scroll", () => {
-  const navbar = document.querySelector(".aksor-navbar");
-  if (window.scrollY > 20) {
-    navbar.classList.add("shadow-sm");
-  } else {
-    navbar.classList.remove("shadow-sm");
-  }
-});
-
-
-// ---------------------------
-// Upload Preview (Image/File)
-// ---------------------------
-function previewInvoice(event) {
-  const file = event.target.files[0];
-
-  if (!file) return;
-
-  const previewBox = document.getElementById("invoicePreview");
-  const reader = new FileReader();
-
-  reader.onload = () => {
-    previewBox.src = reader.result;
-    previewBox.style.display = "block";
-  };
-
-  reader.readAsDataURL(file);
-}
-
-
-// ---------------------------
-// Toast Notification
-// ---------------------------
-function showToast(message, type = "success") {
-  const toast = document.createElement("div");
-  toast.className = `custom-toast ${type}`;
-  toast.textContent = message;
-
-  document.body.appendChild(toast);
-
-  setTimeout(() => {
-    toast.classList.add("show");
-  }, 50);
-
-  setTimeout(() => {
-    toast.classList.remove("show");
-    setTimeout(() => toast.remove(), 300);
-  }, 2500);
-}
-
-
-// ---------------------------
-// Subscription Popup if > 30 invoices
-// ---------------------------
-function checkInvoiceLimit() {
-  let count = localStorage.getItem("invoice_count") || 0;
-
-  if (count > 30) {
-    document.getElementById("subscriptionModal").classList.add("active");
-  }
-}
-
-function closeSubscription() {
-  document.getElementById("subscriptionModal").classList.remove("active");
-}
-
-function incrementInvoiceCount() {
-  let count = localStorage.getItem("invoice_count") || 0;
-  count++;
-  localStorage.setItem("invoice_count", count);
-
-  if (count === 31) {
-    showToast("Limit reached! Please subscribe to continue.", "warning");
-    checkInvoiceLimit();
-  }
-}
-
-
-// ---------------------------
-// Dark Focus Mode (User stays focused)
-// ---------------------------
-const focusToggle = document.getElementById("focusModeToggle");
-
-if (focusToggle) {
-  focusToggle.addEventListener("click", () => {
-    document.body.classList.toggle("focus-mode");
-
-    const enabled = document.body.classList.contains("focus-mode");
-    localStorage.setItem("focusMode", enabled ? "on" : "off");
-
-    showToast(enabled ? "Focus Mode Enabled" : "Focus Mode Disabled");
-  });
-}
-
-// Load focus mode on startup
-if (localStorage.getItem("focusMode") === "on") {
-  document.body.classList.add("focus-mode");
-}
-
-
-// ---------------------------
-// Example function: Upload Invoice to Backend
-// ---------------------------
 async function uploadInvoice() {
   const fileInput = document.getElementById("invoiceFile");
-  if (!fileInput.files[0]) {
+  if (!fileInput || !fileInput.files[0]) {
     showToast("Please upload a file first", "error");
     return;
   }
 
   const formData = new FormData();
-  formData.append("invoice", fileInput.files[0]);
+  // MUST match Flask: request.files['formImage']
+  formData.append("formImage", fileInput.files[0]);
 
   showToast("Uploading invoice...");
 
   try {
-    const res = await fetch("/upload-invoice", {
+    const res = await fetch("/api/upload", {
       method: "POST",
-      body: formData
+      body: formData,
     });
 
-    if (res.ok) {
-      showToast("Invoice uploaded successfully!");
+    const data = await res.json();
+    console.log("Upload response:", data);
 
-      incrementInvoiceCount();
-    } else {
-      showToast("Upload failed. Try again.", "error");
+    if (!res.ok || data.error || data.success === false) {
+      const msg = data.error || "Upload failed";
+      showToast("Error processing invoice: " + msg, "error");
+      return;
+    }
+
+    // Success case
+    const inv = data.invoice;
+    showToast(
+      `Uploaded ${inv.id} (total: ${inv.total})`,
+      "success"
+    );
+
+    incrementInvoiceCount();
+
+    // Optional: show results in the table
+    const resultSection = document.getElementById("resultSection");
+    const resultTable = document.getElementById("resultTable");
+    if (resultSection && resultTable && inv) {
+      resultTable.innerHTML = `
+        <tr><td>Invoice ID</td><td>${inv.id}</td></tr>
+        <tr><td>Vendor</td><td>${inv.vendor}</td></tr>
+        <tr><td>Date</td><td>${inv.date}</td></tr>
+        <tr><td>Total</td><td>${inv.total}</td></tr>
+        <tr><td>Status</td><td>${inv.status}</td></tr>
+      `;
+      resultSection.classList.remove("d-none");
     }
 
   } catch (err) {
-    showToast("Connection error.", "error");
-    console.error(err);
+    console.error("Upload exception:", err);
+    showToast("Error processing invoice: Upload failed", "error");
   }
 }
+<<<<<<< HEAD
 
 
 // ---------------------------
@@ -172,3 +75,5 @@ window.previewInvoice = previewInvoice;
 window.uploadInvoice = uploadInvoice;
 window.selectPlan = selectPlan;
 window.closeSubscription = closeSubscription;
+=======
+>>>>>>> 0971ee7a2496cf5a42af96ad5a658a1ba7acac01

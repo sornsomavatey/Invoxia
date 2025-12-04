@@ -29,13 +29,14 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto text-center">
         <li class="nav-item">
-          <a class="nav-link active" href="/">Dashboard</a>
+          <a class="nav-link" href="/">Dashboard</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/upload">Upload Invoice</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/analytic">Analytics</a>
+          <!-- 👇 active moved here -->
+          <a class="nav-link active" href="/analytic">Analytics</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/pricing">Pricing</a>
@@ -57,6 +58,7 @@
     </p>
   </div>
 </section>
+
 <section>
   <!-- Decorative Floating Icons -->
   <img src="{{ url_for('static', filename='images/floating_invoice.png') }}" class="floating-icon top-0 start-0">
@@ -122,72 +124,4 @@
               <th>Invoice ID</th>
               <th>Vendor</th>
               <th>Date</th>
-              <th>Amount</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for invoice in recent_invoices %}
-            <tr>
-              <td>#{{ invoice.id }}</td>
-              <td>{{ invoice.vendor }}</td>
-              <td>{{ invoice.date }}</td>
-              <td>${{ invoice.total }}</td>
-              <td>
-                {% if invoice.status == 'Processed' %}
-                  <span class="badge bg-success">Processed</span>
-                {% else %}
-                  <span class="badge bg-warning text-dark">Pending</span>
-                {% endif %}
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer class="footer mt-5 py-4 bg-dark text-white">
-  <div class="container">
-    <div class="row text-center text-md-start">
-      <div class="col-md-3 mb-3">
-        <h5>Invoxia</h5>
-        <p>Smart invoice digitization & finance tracker powered by AI.</p>
-      </div>
-      <div class="col-md-3 mb-3">
-        <h5>Contact</h5>
-        <p>Email: support@invoxia.com</p>
-        <p>Location: Phnom Penh, Cambodia</p>
-      </div>
-      <div class="col-md-3 mb-3">
-        <h5>Follow Us</h5>
-        <p>Facebook</p>
-        <p>LinkedIn</p>
-        <p>Instagram</p>
-      </div>
-      <div class="col-md-3 mb-3">
-        <h5>Stay Updated</h5>
-        <input type="email" class="form-control mb-2" placeholder="Enter your email">
-        <button class="btn btn-light w-100">Subscribe</button>
-      </div>
-    </div>
-    <div class="text-center mt-4">
-      © 2025 Invoxia — All Rights Reserved
-    </div>
-  </div>
-</footer>
-
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<!-- CountUp.js for animated metrics -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/countup.js/2.2.0/countUp.min.js"></script>
-<script>
-  document.querySelectorAll('.countup').forEach(el => {
-    new CountUp(el, parseFloat(el.innerText.replace(/[$,]/g,''))).start();
-  });
-</script>
-</body>
-</html>
+              <
